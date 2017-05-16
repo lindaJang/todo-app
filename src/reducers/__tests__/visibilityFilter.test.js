@@ -1,4 +1,4 @@
-import visibilityFilter from './visibilityFilter';
+import visibilityFilter from '../visibilityFilter';
 
 test('set visibilityFilter test', () =>{
 

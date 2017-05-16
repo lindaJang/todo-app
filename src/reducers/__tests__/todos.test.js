@@ -1,4 +1,4 @@
-import todos from './todos';
+import todos from '../todos';
 
 test('addTodo test', () => {
     const prevState = [];

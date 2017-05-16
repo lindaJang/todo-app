@@ -7,19 +7,19 @@ const todos = (state = [], action) => {
                     text: action.text,
                     completed: false
                 }];
-        // case 'TOGGLE_TODO':
-        //     return state.map( todo => {
-        //         if(todo.id !== action.id)
-        //             return state;
-        //
-        //         return {
-        //             ...todo,
-        //             completed: !state.completed
-        //         }
-        //     });
+        case 'TOGGLE_TODO':
+            return state.map( todo => {
+                if(todo.id !== action.id)
+                    return todo;
 
-        case defualt:
-            return state
+                return {
+                    id: todo.id,
+                    text: todo.text,
+                    completed: !todo.completed
+                };
+            });
+        default:
+            return state;
     }
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 let nextId = 0;
-const AddTodo = ({store}) =>{
+const AddTodo = (props, {store}) =>{
     let input;
     return (
         <div>
@@ -18,5 +18,8 @@ const AddTodo = ({store}) =>{
             }}>Add todo</button>
         </div>
     );
+};
+AddTodo.contextTypes = {
+    store: React.PropTypes.object
 };
 export default AddTodo;

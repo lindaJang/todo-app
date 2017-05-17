@@ -8,11 +8,11 @@ test('addTodo test', () => {
         text: 'run today'
     };
     const nextState =
-    [{
-        id: 0,
-        text: 'run today',
-        completed: false
-    }];
+        [{
+            id: 0,
+            text: 'run today',
+            completed: false
+        }];
 
     expect(todos(prevState, action)).toEqual(nextState);
 });

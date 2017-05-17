@@ -7,8 +7,6 @@ const todoApp = combineReducers({
     visibilityFilter
 });
 
-
-
 // export const todoApp = (state ={}, action) => {
 //     return {
 //         todos: todos(state.todos, action),
@@ -16,4 +14,4 @@ const todoApp = combineReducers({
 //     };
 // };
 
-module.exports = todoApp;
+export default todoApp;

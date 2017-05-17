@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {addTodo} from '../action';
 
-let nextId = 0;
 let AddTodo = ({dispatch}) =>{
     let input;
     return (
@@ -10,11 +10,7 @@ let AddTodo = ({dispatch}) =>{
                 input = node;
             }} />
             <button onClick={()=> {
-               dispatch({
-                    type: 'ADD_TODO',
-                    id: nextId++,
-                    text: input.value
-                });
+               dispatch(addTodo(input.value));
                 input.value = '';
             }}>Add todo</button>
         </div>

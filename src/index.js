@@ -2,64 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
-import todoApp from './reducers/index';
-import TodoList from './components/TodoList';
-import AddTodo from './components/AddTodo';
-import Footer from './components/Footer';
-import {connect} from 'react-redux';
-
-const getVisibleTodos = (
-    todos,
-    filter
-) => {
-    switch(filter){
-        case 'SHOW_ALL':
-            return todos;
-        case 'SHOW_ACTIVE':
-            return todos.filter(
-                t => !t.completed
-            );
-        case 'SHOW_COMPLETE':
-            return todos.filter(
-                t => t.completed
-            );
-        default:
-            return;
-    }
-};
-
-const mapStateToTodoListProps = (state) => {
-    return{
-        todos: getVisibleTodos(
-            state.todos,
-            state.visibilityFilter
-        )
-    };
-};
-
-const mapDispatchToTodoListProps = (dispatch) => {
-    return {
-        onTodoClick : (id) => {
-            dispatch({
-                type: 'TOGGLE_TODO',
-                id
-            });
-        }
-    };
-};
-
-const VisibleTodoList = connect(
-    mapStateToTodoListProps,
-    mapDispatchToTodoListProps
-)(TodoList);
-
-const TodoApp = () => (
-    <div>
-        <AddTodo/>
-        <VisibleTodoList/>
-        <Footer/>
-    </div>
-);
+import TodoApp from './containers/TodoApp';
+import todoApp from './reducers/index'
 
 
 ReactDOM.render(

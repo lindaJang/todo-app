@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
@@ -6,9 +6,9 @@ import todoApp from './reducers/index';
 import TodoList from './components/TodoList';
 import AddTodo from './components/AddTodo';
 import Footer from './components/Footer';
+import {connect} from 'react-redux';
 
-
-const getVisibilityTodos = (
+const getVisibleTodos = (
     todos,
     filter
 ) => {
@@ -24,51 +24,34 @@ const getVisibilityTodos = (
                 t => t.completed
             );
         default:
-            return
+            return;
     }
 };
 
-
-class VisibleTodoList extends Component {
-    componentDidMount(){
-        const {store} = this.context;
-        this.unsubscribe = store.subscribe(() =>
-            this.forceUpdate()
-        );
-    }
-    componentWillUnmount(){
-        this.unsubscribe();
-    }
-
-    render(){
-        //const props = this.props;
-        const {store} = this.context;
-        const state = store.getState();
-        return(
-            <TodoList
-                todos={
-                    getVisibilityTodos(
-                        state.todos,
-                        state.visibilityFilter
-                    )
-                }
-                onTodoClick={ id =>
-                store.dispatch({
-                    type: 'TOGGLE_TODO',
-                    id
-                })
-                }
-            />
-        );
-    }
-}
-VisibleTodoList.contextTypes = {
-    store: React.PropTypes.object
+const mapStateToProps = (state) => {
+    return{
+        todos: getVisibleTodos(
+            state.todos,
+            state.visibilityFilter
+        )
+    };
 };
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onTodoClick : (id) => {
+            dispatch({
+                type: 'TOGGLE_TODO',
+                id
+            });
+        }
+    };
+};
 
-
-
+const VisibleTodoList = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TodoList);
 
 const TodoApp = () => (
     <div className="App">

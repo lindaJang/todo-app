@@ -4,10 +4,9 @@ import {createStore} from 'redux';
 //import {Provider} from 'react-redux';
 import todoApp from './reducers/index';
 import TodoList from './components/TodoList';
-//import AddTodo from './components/AddTodo';
+import AddTodo from './components/AddTodo';
 //import Footer from './components/Footer';
 
-const store = createStore(todoApp);
 
 const getVisibilityTodos = (
     todos,
@@ -53,6 +52,7 @@ const Link = ({
 
 class FilterLink extends Component {
     componentWillMount(){
+        const {store} = this.props;
         this.subscribe = store.subscribe(() =>
             this.forceUpdate()
         );
@@ -62,6 +62,7 @@ class FilterLink extends Component {
     }
     render(){
         const props = this.props;
+        const {store} = this.props;
         const state = store.getState();
         return(
             <Link
@@ -83,6 +84,7 @@ class FilterLink extends Component {
 
 class VisibleTodoList extends Component {
     componentWillMount(){
+        const {store} = this.props;
         this.subscribe = store.subscribe(() =>
             this.forceUpdate()
         );
@@ -93,6 +95,7 @@ class VisibleTodoList extends Component {
 
     render(){
         //const props = this.props;
+        const {store} = this.props;
         const state = store.getState();
         return(
             <TodoList
@@ -113,44 +116,29 @@ class VisibleTodoList extends Component {
     }
 }
 
-let nextId = 0;
-const AddTodo = () =>{
-    let input;
-    return (
-        <div>
-            <input ref={node =>{
-                input = node;
-            }} />
-            <button onClick={()=> {
-                store.dispatch({
-                    type: 'ADD_TODO',
-                    id: nextId++,
-                    text: input.value
-                });
-                input.value = '';
-            }}>Add todo</button>
-        </div>
-    );
-};
 
-const Footer = () => (
+
+const Footer = ({store}) => (
     <p>
         Show:
         {' '}
         <FilterLink
             filter='SHOW_ALL'
+            store={store}
         >
             All
         </FilterLink>
         {', '}
         <FilterLink
             filter='SHOW_ACTIVE'
+            store={store}
         >
             Active
         </FilterLink>
         {', '}
         <FilterLink
             filter='SHOW_COMPLETE'
+            store={store}
         >
             Completed
         </FilterLink>
@@ -159,18 +147,20 @@ const Footer = () => (
 
 
 
-const TodoApp = () => (
+const TodoApp = ({ store }) => (
     <div className="App">
-        <AddTodo />
-        <VisibleTodoList />
-        <Footer />
+        <AddTodo store={store}/>
+        <VisibleTodoList store={store}/>
+        <Footer store={store}/>
 
     </div>
 );
 
+//const store = createStore(todoApp);
+
 ReactDOM.render(
     // <Provider store={store}>
-    <TodoApp />,
+    <TodoApp store={createStore(todoApp)}/>,
     // </Provider>,
     document.getElementById('root')
 );

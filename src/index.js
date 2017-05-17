@@ -1,37 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 //import {Provider} from 'react-redux';
 import todoApp from './reducers/index';
 import TodoList from './components/TodoList';
+import AddTodo from './components/AddTodo';
+import Footer from './components/Footer';
 
 const store = createStore(todoApp);
-
-const FilterLink = ({
-                        filter,
-                        currentFilter,
-                        children
-                    }) => {
-    if(filter === currentFilter){
-        return <span>{children}</span>;
-    }
-    return (
-        <a href='#'
-           onClick={e => {
-               e.preventDefault();
-               /*  a 태그의 경우, onclick 이벤트후 기본동작인 href 이벤트가 호출이된다.
-                그래서 onclick과 href가 둘다 호출되어 버리는 문제점이 발생한다.
-                이 때, onclick에서 preventDefault를 호출하게 되면, 다음 이벤트는 모두 무시가 되기 때문에 의도한대로 동작하게 된다. */
-               store.dispatch({
-                   type:'SET_VISIBILITY_FILTER',
-                   filter
-               });
-           }}
-        >
-            {children}
-        </a>
-    );
-};
 
 const getVisibilityTodos = (
     todos,
@@ -54,67 +30,46 @@ const getVisibilityTodos = (
 };
 
 let nextId = 0;
-class TodoApp extends Component {
-    render() {
-        const {
-            todos,
-            visibilityFilter
-        } = this.props;
-        const visibleTodos = getVisibilityTodos(
-            todos,
-            visibilityFilter
-        );
-        return (
-            <div className="App">
-                <input ref={node =>{
-                    this.input = node;
-                }} />
-                <button onClick={()=> {
-                    store.dispatch({
-                        type: 'ADD_TODO',
-                        id: nextId++,
-                        text: this.input.value
-                    });
+const TodoApp = ({
+     todos,
+     visibilityFilter
+}) => (
+    <div className="App">
+        <AddTodo
+            onAddClick={text =>
+            store.dispatch({
+                type: 'ADD_TODO',
+                id: nextId++,
+                text
+            })
+            }
+        />
+        <TodoList
+            todos={
+                getVisibilityTodos(
+                todos,
+                visibilityFilter
+                )
+            }
+            onTodoClick={id =>
+                store.dispatch({
+                   type: 'TOGGLE_TODO',
+                   id
+                })
+            }
+        />
+        <Footer
+            visibilityFilter={visibilityFilter}
+            onFilterClick={filter =>
+            store.dispatch({
+                type: 'SET_VISIBILITY_FILTER',
+                filter
+            })
+            }
+        />
 
-                    this.input.value = '';
-                }}>Add todo</button>
-                <TodoList
-                    todos={visibleTodos}
-                    onTodoClick={id =>
-                        store.dispatch({
-                           type: 'TOGGLE_TODO',
-                           id
-                        })
-                    }
-                />
-                <p>
-                    Show:
-                    {' '}
-                    <FilterLink
-                        filter='SHOW_ALL'
-                        currentFilter={visibilityFilter}
-                    >
-                        All
-                    </FilterLink>
-                    {', '}
-                    <FilterLink
-                        filter='SHOW_ACTIVE'
-                        currentFilter={visibilityFilter}
-                    >
-                        Active
-                    </FilterLink>
-                    {', '}
-                    <FilterLink
-                        filter='SHOW_COMPLETE'
-                        currentFilter={visibilityFilter}
-                    >
-                        Completed
-                    </FilterLink>
-                </p>
-            </div>
-        );
-    }
-}
+    </div>
+);
 
 const render = () => {
     ReactDOM.render(

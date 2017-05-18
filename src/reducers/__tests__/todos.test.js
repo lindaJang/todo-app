@@ -1,9 +1,11 @@
 import todos from '../todos';
+import {ADD_TODO, TOGGLE_TODO} from '../../action';
 
-test('addTodo test', () => {
+
+test('addTodo run today by using a single reducer(todos)', () => {
     const prevState = [];
     const action = {
-        type: 'ADD_TODO',
+        type: ADD_TODO,
         id: 0,
         text: 'run today'
     };
@@ -17,7 +19,7 @@ test('addTodo test', () => {
     expect(todos(prevState, action)).toEqual(nextState);
 });
 
-test('toggleTodo test', () => {
+test('toggleTodo index:0 by using a single reducer(todos)', () => {
     const prevState = [
         {
             id: 0,
@@ -31,7 +33,7 @@ test('toggleTodo test', () => {
         }
     ];
     const action = {
-        type: 'TOGGLE_TODO',
+        type: TOGGLE_TODO,
         id: 0
     };
     const nextState = [

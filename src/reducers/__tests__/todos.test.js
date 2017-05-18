@@ -1,14 +1,10 @@
 import todos from '../todos';
-import {ADD_TODO, TOGGLE_TODO} from '../../action';
+import {addTodo, toggleTodo} from '../../action';
 
 describe('todos', () => {
     test('addTodo run today by using a single reducer(todos)', () => {
         const prevState = [];
-        const action = {
-            type: ADD_TODO,
-            id: 0,
-            text: 'run today'
-        };
+        const action = addTodo('run today');
         const nextState =
             [{
                 id: 0,
@@ -32,10 +28,7 @@ describe('todos', () => {
                 completed: false
             }
         ];
-        const action = {
-            type: TOGGLE_TODO,
-            id: 0
-        };
+        const action = toggleTodo(0);
         const nextState = [
             {
                 id: 0,
@@ -50,4 +43,36 @@ describe('todos', () => {
         ];
         expect(todos(prevState,action)).toEqual(nextState);
     });
+
+    test('default test', () => {
+        const prevState = [
+            {
+                id: 0,
+                text: 'run today',
+                completed: false
+            },
+            {
+                id: 1,
+                text: 'walk today',
+                completed: false
+            }
+        ];
+        const action = {
+            type: 'defaults'
+        };
+        const nextState = [
+            {
+                id: 0,
+                text: 'run today',
+                completed: false
+            },
+            {
+                id: 1,
+                text: 'walk today',
+                completed: false
+            }
+        ];
+        expect(todos(prevState,action)).toEqual(nextState);
+    });
+
 });
